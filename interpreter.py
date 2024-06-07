@@ -403,15 +403,36 @@ def run():
     line_num = 1
     data = {}
     is_in_block = False
+    code_block = []
+    block_stack = 0
+    Conditional_Statement = []
 
     while (1):
         line = input(">>>")
         line.strip()
-        token = translate_line(line, data)
 
-        if token == Token.START:
-            is_in_block = True
-        elif token == Token.END:
-            is_in_block = False
+        if is_in_block:
+            code_block.append(line)
+        else:
+            translate_line(line, data)
+            
+            words = line.split(" ")
+            if get_token(words[0]) == Token.IF or get_token(words[0]) == Token.WHILE:
+                Conditional_Statement = words
+
+        if len(line) == 1:
+            if line[0] == 'ㄱ':
+                is_in_block = True
+                block_stack += 1
+            elif line[0] == 'ㄴ':
+                block_stack -= 1
+
+                if block_stack == 0:
+                    code_block.pop()
+                    data = Code_Block_Run(code_block, Conditional_Statement, data)
+
+                    is_in_block = False
+                    code_block = []
+                    Conditional_Statement = []
 
         line_num += 1
