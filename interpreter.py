@@ -305,7 +305,7 @@ def translate_line(line, data):
             if len(tokens) > 3:
                 value = float(get_formula_value(words[3:], data))
             else:
-                value = 0
+                value = 0.0
             
             data_declare_func(name, data, value)
             return 0
