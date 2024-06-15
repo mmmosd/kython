@@ -88,11 +88,11 @@ def get_token(word):
 
 def error(Type):
     if Type == Error.ERROR_SYNTAX:
-        sys.exit("{}번째 줄 에러! 문법이 맞지 않습니다. 에러코드: {}".format(line_num, Type))
+        sys.exit("문법이 맞지 않습니다. 에러코드: {}".format(Type))
     if Type == Error.ERROR_SAME_VAR_NAME:
-        sys.exit("{}번째 줄 에러! 같은 변수 이름이 존재합니다. 에러코드: {}".format(line_num, Type))
+        sys.exit("같은 변수 이름이 존재합니다. 에러코드: {}".format(Type))
     if Type == Error.ERROR_VAR_NOT_EXIST:
-        sys.exit("{}번째 줄 에러! 존재하지 않는 변수입니다. 에러코드: {}".format(line_num, Type))
+        sys.exit("존재하지 않는 변수입니다. 에러코드: {}".format(Type))
 
 def data_declare_func(name, data, value):
     if name in data:
@@ -257,20 +257,20 @@ def Get_Conditional_Statement_data(cs, data):
 
 def Code_Block_Run(code, cs, data):
     if len(cs) == 0:
-        data = compile(code, data)
+        data = compile(code, data, line_num)
         return data
     elif get_token(cs[0]) == Token.IF:
         A, B, operator = Get_Conditional_Statement_data(cs, data)
 
         if logical_operation(A, B, operator):
-            data = compile(code, data)
+            data = compile(code, data, line_num)
         
         return data
     elif get_token(cs[0]) == Token.WHILE:
         A, B, operator = Get_Conditional_Statement_data(cs, data)
 
         while logical_operation(A, B, operator):
-            data = compile(code, data)
+            data = compile(code, data, line_num)
             A, B, operator = Get_Conditional_Statement_data(cs, data)
 
         return data
@@ -355,9 +355,9 @@ def translate_line(line, data):
             data_access_func(name, data, var_type(get_formula_value(words[3:], data)))
             return 0
 
-def compile(code, data={}):
+def compile(code, data={}, line=1):
     global line_num
-    line_num = 1
+    line_num = line
     is_in_block = False
     code_block = []
     block_stack = 0
