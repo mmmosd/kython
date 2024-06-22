@@ -277,13 +277,13 @@ def Code_Block_Run(code, cs, data):
 
 def translate_line(line, data):
     if (line == ""): return 0
-    if (line[0] == "ㅣ"): return 0
     if (line[0] == "ㄱ") or (line[0] == "ㄴ"): return 0
 
     words = line.split(" ")
     tokens = []
 
     for w in words:
+        if (w == "ㅣ"): break
         token = get_token(w)
         tokens.append(token)
 
