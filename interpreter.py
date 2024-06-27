@@ -287,6 +287,8 @@ def translate_line(line, data):
         token = get_token(w)
         tokens.append(token)
 
+    if len(tokens) == 0: return 0
+
     if tokens[0] == Token.NONE:
         error(Error.ERROR_SYNTAX)
 
